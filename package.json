@@ -1,0 +1,19 @@
+{
+  "name": "traintimes",
+  "version": "1.0.0",
+  "description": "Application to view Train Times based off of an API provided by Irish gov",
+  "main": "trains.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "https": "^1.0.0",
+    "request": "^2.88.2",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Skehan",
+  "license": "ISC"
+}

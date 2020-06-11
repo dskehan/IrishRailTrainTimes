@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+</style>
+</head>    
+<body>
+
+<select id="stations" aria-placeholder="Select a station!"></select>
+
+<br><br>
+<table id="myTable"> </table>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script>
+
+var dropdownData
+$(document).ready(function () {
+    var url = '/trainData2/AllStations'
+    $.get(url, function (data) {
+      dropdownData = data 
+      loadDropdown() 
+    });
+    return false; 
+});
+
+function loadDropdown(){
+    values = Object.keys(dropdownData)
+    var option = '';
+    for (var i=0;i<values.length;i++){
+        option += '<option value="'+ values[i] + '">' + values[i] + '</option>';
+    }
+    $('#stations').append(option);
+    var option2 = "<option disabled selected hidden>Please Choose a Train Station!</option>"
+    $('#stations').append(option2);
+}
+
+$(function(){ // jQuery DOM ready
+  
+    $("#stations").change(function() {
+    $('#myTable').empty() 
+    var StationID = dropdownData[$("#stations").val()]
+    requestData(StationID) 
+
+    });
+
+
+  function addData(trainData){
+      console.log(trainData.length)
+      if(trainData.length > 1){
+        var byDate = trainData.slice(0);
+        byDate.sort(function(a,b) {
+        return a.Duein - b.Duein;
+        });
+        console.log('by date:');
+        console.log(byDate);
+    }
+    else {
+        byDate = trainData
+    } 
+    let table = document.getElementById("myTable");
+
+    data = [
+        "Station",
+        "Traincode",
+        "Origin",
+        "Destination",
+        "Status",
+        "Due in",
+        "Expected Arrival",
+        "Direction",
+        "Train Type" 
+    ]
+    generateTableHead(table, data);
+    generateTable(table, byDate);
+}
+
+function generateTableHead(table, data) {
+  let thead = table.createTHead();
+  let row = thead.insertRow();
+  for (let key of data) {
+    let th = document.createElement("th");
+    let text = document.createTextNode(key);
+    th.appendChild(text);
+    row.appendChild(th);
+  }
+}
+
+function generateTable(table, data) {
+   var trimData
+   var x  = [
+        "Stationfullname",
+        "Traincode",
+        "Origin",
+        "Destination",
+        "Status",
+        "Duein",
+        "Exparrival",
+        "Direction",
+        "Traintype" 
+    ]
+
+  for (let element of data) {
+    let row = table.insertRow();
+    for (var i = 0; i < x.length; i++) {
+      let cell = row.insertCell();
+      let text = document.createTextNode(element[x[i]]);
+      cell.appendChild(text);
+    }
+  }
+
+    }
+
+    function requestData(StationID){
+        var url = '/trainData/' + StationID
+        console.log('client url:', url);
+        $.get(url, function (data) {
+        console.log('client data:', data);
+        addData(data) 
+        });
+        return false;
+    }
+
+
+});
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
