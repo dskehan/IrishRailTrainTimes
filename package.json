@@ -4,7 +4,7 @@
   "description": "Application to view Train Times based off of an API provided by Irish gov",
   "main": "trains.js",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "https": "^1.0.0",
     "request": "^2.88.2",
     "xml2js": "^0.4.23"
